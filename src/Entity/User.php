@@ -23,13 +23,13 @@ class User
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private Customer $customer;
 
-    #[ORM\Column(type: 'date', nullable: true)]
-    private ?DateTimeInterface $registeredAt;
+    #[ORM\Column(type: 'date')]
+    private DateTimeInterface $registeredAt;
 
     #[ORM\OneToMany(targetEntity: Session::class, mappedBy: 'user')]
     private Collection $sessions;
 
-    public function __construct(string $email, Customer $customer, ?DateTimeInterface $registeredAt = null)
+    public function __construct(string $email, Customer $customer, DateTimeInterface $registeredAt)
     {
         $this->sessions = new ArrayCollection;
         $this->email = $email;
