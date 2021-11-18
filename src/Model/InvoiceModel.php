@@ -3,7 +3,8 @@
 namespace App\Model;
 
 use Symfony\Component\Serializer\Annotation\Groups;
-use OpenApi\Annotations as OA;
+use App\Validator\Exists;
+use App\Entity\Customer;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class InvoiceModel
@@ -17,4 +18,9 @@ class InvoiceModel
     #[Assert\NotBlank(groups: ["invoice:post"])]
     #[Assert\Date(groups: ["invoice:post"])]
     public string $end;
+
+    #[Groups(["invoice:post"])]
+    #[Assert\NotBlank(groups: ["invoice:post"])]
+    #[Exists(entityClass: Customer::class, groups: ["invoice:post"])]
+    public string $customerId;
 }
