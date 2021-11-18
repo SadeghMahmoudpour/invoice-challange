@@ -1,0 +1,10 @@
+nelmio_api_doc:
+    documentation:
+        info:
+            title: Invoice API
+            description: Api For Invoice Application
+            version: 1.0.0
+    areas: # to filter documented areas
+        path_patterns:
+            - ^/(?!/doc$) # Accepts routes under /api except /api/doc
+        host_patterns: [ ^api\. ]
