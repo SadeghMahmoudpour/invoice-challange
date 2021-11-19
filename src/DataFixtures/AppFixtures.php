@@ -107,8 +107,8 @@ class AppFixtures extends Fixture
         foreach (self::SESSIONS as $sessionData) {
             $this->sessionFactory->create(
                 $users[$sessionData['user']],
-                new DateTime($sessionData['activateAt']),
-                new DateTime($sessionData['appointmentAt'])
+                $sessionData['activateAt'] ? new DateTime($sessionData['activateAt']) : null,
+                $sessionData['appointmentAt'] ? new DateTime($sessionData['appointmentAt']) : null
             );
         }
 
