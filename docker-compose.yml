@@ -15,6 +15,20 @@ services:
         ipv4_address: ${IP_PREFIX}.3
     env_file: .env
 
+  db_test:
+    image: postgres:12.2
+    environment:
+      POSTGRES_PASSWORD: invoice
+      POSTGRES_USER: invoice
+      POSTGRES_DB: invoice_test
+      TZ: "UTC"
+    volumes:
+      - invoicedbtestdata:/var/lib/postgresql/data
+    networks:
+      default:
+        ipv4_address: ${IP_PREFIX}.4
+    env_file: .env
+
   web:
     image: webdevops/php-nginx-dev:8.0
     volumes:
@@ -28,26 +42,9 @@ services:
       default:
         ipv4_address: ${IP_PREFIX}.2
 
-###> doctrine/doctrine-bundle ###
-  database:
-    image: postgres:${POSTGRES_VERSION:-13}-alpine
-    environment:
-      POSTGRES_DB: ${POSTGRES_DB:-app}
-      # You should definitely change the password in production
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-ChangeMe}
-      POSTGRES_USER: ${POSTGRES_USER:-symfony}
-    volumes:
-      - db-data:/var/lib/postgresql/data:rw
-      # You may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
-      # - ./docker/db/data:/var/lib/postgresql/data:rw
-###< doctrine/doctrine-bundle ###
 volumes:
   invoicedbdata:
-
-###> doctrine/doctrine-bundle ###
-  db-data:
-###< doctrine/doctrine-bundle ###
-    driver: local
+  invoicedbtestdata:
 
 networks:
   default:
