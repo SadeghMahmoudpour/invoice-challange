@@ -4,6 +4,7 @@ namespace App\Controller\Api;
 
 use App\Configuration\RequestModel;
 use App\Configuration\RestView;
+use App\Entity\Invoice;
 use App\Factory\InvoiceFactory;
 use App\Model\InvoiceModel;
 use App\Repository\CustomerRepository;
@@ -35,9 +36,7 @@ class InvoiceController extends AbstractController
      */
     #[Route("", name: "create", methods: ["POST"])]
     #[RequestModel("invoiceModel", groups:["invoice:post"])]
-    #[RestView(serializerGroups:[
-        "invoice:get:basic",
-    ])]
+    #[RestView(serializerGroups:["invoice:get:basic"])]
     public function create(InvoiceModel $invoiceModel, ConstraintViolationListInterface $validationErrors)
     {
         if (count($validationErrors) > 0) {
@@ -52,6 +51,16 @@ class InvoiceController extends AbstractController
 
         $this->entityManager->flush();
 
+        return $invoice;
+    }
+
+    /**
+     * @OA\Get()
+     */
+    #[Route("/{id}", methods:["GET"], name:"detail")]
+    #[RestView(serializerGroups:["invoice:get", "invoiceEvent:get", "user:get"])]
+    public function detail(Invoice $invoice)
+    {
         return $invoice;
     }
 }

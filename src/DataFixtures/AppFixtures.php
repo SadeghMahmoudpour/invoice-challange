@@ -22,27 +22,27 @@ class AppFixtures extends Fixture
 
     private const USERS = [
         [
-            'email' => 'User One',
+            'email' => 'user_one@example.com',
             'customer' => 0,
             'registeredAt' => '2020-12-01',
         ],
         [
-            'email' => 'User Two',
+            'email' => 'user_two@example.com',
             'customer' => 0,
             'registeredAt' => '2020-12-15',
         ],
         [
-            'email' => 'User Three',
+            'email' => 'user_three@example.com',
             'customer' => 0,
             'registeredAt' => '2021-01-01',
         ],
         [
-            'email' => 'User Four',
+            'email' => 'user_four@example.com',
             'customer' => 0,
             'registeredAt' => '2020-09-01',
         ],
         [
-            'email' => 'User Five',
+            'email' => 'user_five@example.com',
             'customer' => 1,
             'registeredAt' => '2020-12-01',
         ],

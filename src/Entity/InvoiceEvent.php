@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\InvoiceEventRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: InvoiceEventRepository::class)]
 class InvoiceEvent
@@ -28,15 +29,19 @@ class InvoiceEvent
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'invoiceEvents')]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
+    #[Groups(["invoiceEvent:get"])]
     private User $user;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Groups(["invoiceEvent:get"])]
     private string $event;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[Groups(["invoiceEvent:get"])]
     private ?string $lastEvent;
 
     #[ORM\Column(type: 'float')]
+    #[Groups(["invoiceEvent:get"])]
     private float $price;
 
     public function __construct(Invoice $invoice, User $user, string $event, ?string $lastEvent = null)
@@ -66,6 +71,11 @@ class InvoiceEvent
     public function getEvent(): string
     {
         return $this->event;
+    }
+
+    public function getLastEvent(): ?string
+    {
+        return $this->lastEvent;
     }
 
     public function getPrice(): float

@@ -14,7 +14,7 @@ class Invoice
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    #[Groups(["invoice:get:basic"])]
+    #[Groups(["invoice:get:basic", "invoice:get"])]
     private ?int $id;
 
     #[ORM\ManyToOne(targetEntity: Customer::class, inversedBy: 'invoices')]
@@ -22,16 +22,24 @@ class Invoice
     private Customer $customer;
 
     #[ORM\Column(type: 'date')]
+    #[Groups(["invoice:get"])]
     private DateTimeInterface $startsAt;
 
     #[ORM\Column(type: 'date')]
+    #[Groups(["invoice:get"])]
     private DateTimeInterface $endsAt;
 
     #[ORM\Column(type: 'float')]
+    #[Groups(["invoice:get"])]
     private float $totalPrice;
 
     #[ORM\OneToMany(mappedBy: 'invoice', targetEntity: InvoiceEvent::class)]
+    #[Groups(["invoice:get"])]
     private Collection $invoiceEvents;
+
+    #[ORM\Column(type: 'json', nullable: true)]
+    #[Groups(["invoice:get"])]
+    private $extraInfo = [];
 
     public function __construct(
         Customer $customer,
@@ -44,6 +52,7 @@ class Invoice
         $this->endsAt = $endsAt;
         $this->totalPrice = $totalPrice;
         $this->invoiceEvents = new ArrayCollection;
+        $this->setPricingInfo();
     }
 
     public function getId(): ?int
@@ -86,8 +95,32 @@ class Invoice
         }
         $this->invoiceEvents->add($invoiceEvent);
         $this->totalPrice += $invoiceEvent->getPrice();
+        $this->increaseEventFrequescy($invoiceEvent->getEvent());
         $invoiceEvent->setInvoice($this);
 
         return $this;
+    }
+
+    public function getExtraInfo(): ?array
+    {
+        return $this->extraInfo;
+    }
+
+    private function increaseEventFrequescy($eventName)
+    {
+        if (!isset($this->extraInfo['frequency'])) {
+            $this->extraInfo['frequency'] = [];
+        }
+        if (!isset($this->extraInfo['frequency'][$eventName])) {
+            $this->extraInfo['frequency'][$eventName] = 0;
+        }
+        $this->extraInfo['frequency'][$eventName] ++;
+
+        return $this;
+    }
+
+    private function setPricingInfo()
+    {
+        $this->extraInfo['pricing'] = InvoiceEvent::EVENT_SORTED_PRICE;
     }
 }
