@@ -22,3 +22,14 @@ sh:
 
 rsh:
 	$(rwebexec) web bash
+
+install:
+	$(webexec) web composer install
+
+seed:
+	$(webexec) web php bin/console doctrine:fixtures:load --no-interaction
+
+init: up install seed
+
+test:
+	$(webexec) web php ./vendor/bin/phpunit
