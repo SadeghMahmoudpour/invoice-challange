@@ -60,6 +60,9 @@ class User
         return $this;
     }
 
+    /**
+     * @return Session[]|Collection
+     */
     public function getSessions(): Collection
     {
         return $this->sessions;
