@@ -4,7 +4,7 @@ namespace App\Factory;
 
 use App\Entity\Customer;
 use App\Entity\Invoice;
-use App\Services\InvocePriceCalculator\InvoicePriceCalculatorInterface;
+use App\Services\InvoceCalculator\InvoiceCalculatorInterface;
 use DateTimeInterface;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -12,14 +12,14 @@ class InvoiceFactory
 {
     public function __construct(
         private EntityManagerInterface $entityManager,
-        private InvoicePriceCalculatorInterface $invoicePriceCalculator
+        private InvoiceCalculatorInterface $invoiceCalculator
     ) {
     }
 
     public function create(Customer $customer, DateTimeInterface $start, DateTimeInterface $end)
     {
-        $amount = $this->invoicePriceCalculator->calculate($customer, $start, $end);
-        $invoice = new Invoice($customer, $start, $end, $amount);
+        $invoice = new Invoice($customer, $start, $end);
+        $this->invoiceCalculator->calculate($invoice);
         $this->entityManager->persist($invoice);
 
         return $invoice;

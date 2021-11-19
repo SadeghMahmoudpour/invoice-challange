@@ -66,7 +66,7 @@ class AppFixtures extends Fixture
         ],
         [
             'user' => 2,
-            'activateAt' => '2021-01-01',
+            'activateAt' => '2021-01-10',
             'appointmentAt' => null,
         ],
         [
@@ -77,7 +77,7 @@ class AppFixtures extends Fixture
         [
             'user' => 3,
             'activateAt' => '2021-01-12',
-            'appointmentAt' => '2020-01-22',
+            'appointmentAt' => '2021-01-22',
         ],
     ];
 

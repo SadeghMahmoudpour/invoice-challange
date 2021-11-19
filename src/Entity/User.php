@@ -29,9 +29,13 @@ class User
     #[ORM\OneToMany(targetEntity: Session::class, mappedBy: 'user')]
     private Collection $sessions;
 
+    #[ORM\OneToMany(mappedBy: 'invoice', targetEntity: InvoiceEvent::class)]
+    private Collection $invoiceEvents;
+
     public function __construct(string $email, Customer $customer, DateTimeInterface $registeredAt)
     {
         $this->sessions = new ArrayCollection;
+        $this->invoiceEvents = new ArrayCollection;
         $this->email = $email;
         $this->registeredAt = $registeredAt;
         $this->setCustomer($customer);
@@ -82,5 +86,24 @@ class User
     public function getRegisteredAt(): DateTimeInterface
     {
         return $this->registeredAt;
+    }
+
+    /**
+     * @return InvoiceEvent[]|Collection
+     */
+    public function getInvoiceEvents(): Collection
+    {
+        return $this->invoiceEvents;
+    }
+
+    public function addInvoiceEvent(InvoiceEvent $invoiceEvent)
+    {
+        if ($this->invoiceEvents->contains($invoiceEvent)) {
+            return $this;
+        }
+        $this->invoiceEvents->add($invoiceEvent);
+        $invoiceEvent->setUser($this);
+
+        return $this;
     }
 }

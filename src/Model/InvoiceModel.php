@@ -21,6 +21,7 @@ class InvoiceModel
 
     #[Groups(["invoice:post"])]
     #[Assert\NotBlank(groups: ["invoice:post"])]
+    #[Assert\Type(type: 'integer',groups: ["invoice:post"])]
     #[Exists(entityClass: Customer::class, groups: ["invoice:post"])]
-    public string $customerId;
+    public int $customerId;
 }
